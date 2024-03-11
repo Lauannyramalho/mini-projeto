@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadastro de Pessoas</title>
+</head>
+<body>
+
+<h1>Cadastro de Pessoas</h1>
+
+<label for="nome">Nome:</label>
+<input type="text" id="nome" name="nome" required><br><br>
+
+<label for="idade">Idade:</label>
+<input type="number" id="idade" name="idade" required><br><br>
+
+<label for="dataNascimento">Data de Nascimento:</label>
+<input type="date" id="dataNascimento" name="dataNascimento" required><br><br>
+
+<button onclick="cadastrar()">Cadastrar</button>
+<button onclick="listar()">Listar</button>
+
+<div id="pessoas"></div>
+
+<script>
+let pessoas = [];
+
+function cadastrar() {
+    const nomeInput = document.getElementById("nome").value;
+    const idadeInput = document.getElementById("idade").value;
+    const dataNascimentoInput = document.getElementById("dataNascimento").value;
+
+    const novaPessoa = { nome: nomeInput, idade: idadeInput, dataNascimento: dataNascimentoInput };
+    pessoas.push(novaPessoa);
+
+    document.getElementById("nome").value = "";
+    document.getElementById("idade").value = "";
+    document.getElementById("dataNascimento").value = "";
+
+    listar();
+}
+
+function listar() {
+    const pessoasDiv = document.getElementById("pessoas");
+    pessoasDiv.innerHTML = "";
+
+    pessoas.forEach(function(pessoa, index) {
+        const div = document.createElement("div");
+        div.innerHTML = `<strong>Nome:</strong> ${pessoa.nome}, <strong>Idade:</strong> ${pessoa.idade}, <strong>Data de Nascimento:</strong> ${pessoa.dataNascimento}`;
+        
+        const editarBtn = document.createElement("button");
+        editarBtn.textContent = "Editar";
+        editarBtn.onclick = function() { editar(index); };
+        
+        const deletarBtn = document.createElement("button");
+        deletarBtn.textContent = "Deletar";
+        deletarBtn.onclick = function() { deletar(index); };
+        
+        div.appendChild(editarBtn);
+        div.appendChild(deletarBtn);
+        
+        pessoasDiv.appendChild(div);
+    });
+}
+
+function editar(index) {
+    const novoNome = prompt("Digite o novo nome:");
+    const novaIdade = prompt("Digite a nova idade:");
+    const novaDataNascimento = prompt("Digite a nova data de nascimento (YYYY-MM-DD):");
+    
+    if (novoNome !== null && novaIdade !== null && novaDataNascimento !== null) {
+        pessoas[index].nome = novoNome;
+        pessoas[index].idade = novaIdade;
+        pessoas[index].dataNascimento = novaDataNascimento;
+        listar();
+    }
+}
+
+function deletar(index) {
+    if (confirm("Tem certeza que deseja deletar esta pessoa?")) {
+        pessoas.splice(index, 1);
+        listar();
+    }
+}
+</script>
+
+</body>
+</html>
